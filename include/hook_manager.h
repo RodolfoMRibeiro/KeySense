@@ -1,5 +1,5 @@
-#ifndef HOOKMANAGER_H
-#define HOOKMANAGER_H
+#ifndef HOOK_MANAGER_H
+#define HOOK_MANAGER_H
 
 #include <Windows.h>
 
