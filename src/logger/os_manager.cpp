@@ -2,8 +2,6 @@
 
 #include <Windows.h>
 
-OSManager::OSManager() {};
-
 void OSManager::setTerminalVisibility(bool isVisible = true) {
     if (isVisible)
         ShowWindow(FindWindowA("ConsoleWindowClass", NULL), 1); 

