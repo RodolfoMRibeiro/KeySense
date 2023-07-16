@@ -1,7 +1,5 @@
 #include "../../include/hook_manager.h"
 
-HookManager::HookManager() : _hook(nullptr) {}
-
 void HookManager::InstallKeyboardHook(HookCallback hookCallback) {
     HHOOK hookHandle = SetWindowsHookEx(WH_KEYBOARD_LL, hookCallback, NULL, 0);
 
