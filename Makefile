@@ -1,30 +1,12 @@
-# Compiler and flags
-CC := g++
-CFLAGS := -std=c++11 -Wall
+CXX := g++
+CXXFLAGS := -Wall -Iinclude
 
-# Source directories
-SRCDIR := src
-SRCS := $(wildcard $(SRCDIR)/**/*.cpp) $(wildcard $(SRCDIR)/*.cpp)
+SRCS := src/windows_logger/hook_manager.cpp src/windows_logger/key_input.cpp src/windows_logger/keylogger.cpp src/windows_logger/os_manager.cpp src/windows_logger/windows_info.cpp src/main.cpp
+OUT := my_program.exe
 
-# Build directory
-BUILDDIR := build
-
-# Object files
-OBJS := $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SRCS))
-
-# Output executable
-TARGET := myprogram
-
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
-
-$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp | $(BUILDDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(BUILDDIR):
-	mkdir -p $(BUILDDIR)
+build: $(OUT)
+$(OUT): $(SRCS)
+	$(CXX) $(CXXFLAGS) $(SRCS) -o $(OUT)
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OUT)
