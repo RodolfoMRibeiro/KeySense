@@ -3,7 +3,9 @@
 
 class OSManager {
 public:
-    void SetTerminalVisibility(bool isVisible);   
+    void SetTerminalVisibility(bool isVisible); 
+    
+    static void GracefulShutdown(int signal);  
 };
 
 #endif
