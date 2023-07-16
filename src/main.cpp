@@ -1,5 +1,6 @@
 #include <iostream>
 #include <csignal>
+#include <memory>
 
 #include "../include/keylogger.h"
 #include "../include/os_manager.h"
@@ -9,7 +10,7 @@ std::ofstream openLogFile();
 int main() {
     std::ofstream loggerFile = openLogFile();
     
-    Keylogger* logger = new Keylogger(std::move(loggerFile));
+    std::unique_ptr<Keylogger> logger = std::make_unique<Keylogger>(std::move(loggerFile));
 
     if (!logger) {
         std::cerr << "Failed to set up Keylogger." << std::endl;
