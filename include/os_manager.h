@@ -3,7 +3,7 @@
 
 class OSManager {
 public:
-    void setTerminalVisibility(bool isVisible = true);   
+    void SetTerminalVisibility(bool isVisible);   
 };
 
 #endif
