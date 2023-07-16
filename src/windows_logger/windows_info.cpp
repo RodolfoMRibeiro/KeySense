@@ -1,8 +1,7 @@
 #include "../../include/windows_info.h"
+#include <iostream>
 
-WindowInfo::WindowInfo() {
-    char lastwindow[256] = "";
-}
+WindowInfo::WindowInfo() {}
 
 void WindowInfo::GetActiveWindowInfo(std::stringstream& output) {
     HWND foreground = GetForegroundWindow();
@@ -12,7 +11,7 @@ void WindowInfo::GetActiveWindowInfo(std::stringstream& output) {
         char window_title[256];
         GetWindowTextA(foreground, (LPSTR)window_title, 256);
 
-        if (strcmp(window_title, lastwindow) != 0)
+        if (strcmp(window_title, this->lastwindow) != 0)
         {
             strcpy_s(lastwindow, sizeof(lastwindow), window_title);
             appendWindowTitle(output, window_title);

