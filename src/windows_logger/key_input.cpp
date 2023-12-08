@@ -99,6 +99,6 @@ HKL KeyInput::getKeyboardLayout() {
         threadID = GetWindowThreadProcessId(foreground, NULL);
         layout = GetKeyboardLayout(threadID);
     }
-    
+
     return layout;
 }

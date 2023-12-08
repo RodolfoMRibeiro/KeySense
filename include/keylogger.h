@@ -25,7 +25,7 @@ private:
     std::ofstream _outputFile;
 
     void writeToOutput(std::stringstream& output);
-    void keepRunning();    
+    void keepRunning();
 };
 
 #endif

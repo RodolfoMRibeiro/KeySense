@@ -10,7 +10,7 @@ enum class LoggingFormat { Default, Decimal, Hexadecimal };
 class KeyInput {
 public:
     KeyInput(LoggingFormat logging_format);
-    
+
     bool IgnoreMouse(int keyStroke);
     void FormatOutputBasedOnLogging(std::stringstream& output, int keyStroke);
 
